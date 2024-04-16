@@ -6,10 +6,13 @@ import cv2
 import easyocr
 from matplotlib import pyplot as pl
 from AI_scripts import get_car_numbers
+from SpeechRecognizer import SpeechRecognizer
+
 
 DATA = []
 
 bot = telebot.TeleBot("7071139386:AAFsS-83DgpFqRevZ7UYk8N2htLPd-X0ok8")
+recognizer = SpeechRecognizer()
 
 
 @bot.message_handler(commands=["start"])
@@ -17,6 +20,24 @@ def start(message):
     DATA.append(message.text)
     mess = f"Здравствуйте, {message.from_user.first_name}!"
     bot.send_message(message.chat.id, mess)
+
+
+@bot.message_handler(content_types=['voice'])
+def process_voice(message):
+    voice_path = "sound.wav"
+    text_path = "recognized_text.txt"
+
+    file_info = bot.get_file(message.voice.file_id)
+    downloaded_file = bot.download_file(file_info.file_path)
+    with open(voice_path, "wb") as f:
+        f.write(downloaded_file)
+    temp_res, temp_res_text = recognizer.Recognize(voice_path, text_path)
+    if temp_res == 1:
+        bot.send_message(message.chat.id, f"Неизвестная ошибка: {temp_res_text}"
+    else:
+        with open(text_path, "r"):
+        lines = f.readlines()
+        bot.send_message(message.chat.id, lines)
 
 
 @bot.message_handler(commands=["info"])
