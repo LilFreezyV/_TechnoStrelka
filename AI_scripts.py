@@ -38,3 +38,8 @@ def get_car_numbers(file, extension):
     text = text.readtext(crop)
     result = text[0][-2][:6]
     return result
+
+
+def ai_dialog(sentence):
+    pass
+

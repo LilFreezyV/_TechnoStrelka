@@ -8,7 +8,6 @@ from matplotlib import pyplot as pl
 from AI_scripts import get_car_numbers
 from SpeechRecognizer import SpeechRecognizer
 
-
 DATA = []
 
 bot = telebot.TeleBot("7071139386:AAFsS-83DgpFqRevZ7UYk8N2htLPd-X0ok8")
@@ -33,11 +32,11 @@ def process_voice(message):
         f.write(downloaded_file)
     temp_res, temp_res_text = recognizer.Recognize(voice_path, text_path)
     if temp_res == 1:
-        bot.send_message(message.chat.id, f"Неизвестная ошибка: {temp_res_text}"
+        bot.send_message(message.chat.id, f"Неизвестная ошибка: {temp_res_text}")
     else:
-        with open(text_path, "r"):
-        lines = f.readlines()
-        bot.send_message(message.chat.id, lines)
+        with open(text_path, "r") as f:
+            lines = f.readlines()
+            bot.send_message(message.chat.id, lines)
 
 
 @bot.message_handler(commands=["info"])
